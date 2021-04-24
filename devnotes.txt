@@ -1,0 +1,13 @@
+LDJAM48
+
+free diving :)
+
+rhythm mechanic to go down
+visibility getting worse as you get deep
+    perhaps need flashes of visibility
+pre-dive breathing minigame
+side minigame for mental state?
+
+highscore table
+
+create an animated favicon? https://www.favicon.cc/
