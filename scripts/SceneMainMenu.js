@@ -22,6 +22,7 @@ class SceneMainMenu extends Phaser.Scene {
         this.load.image('breathIndicator', 'breathIndicator.png');
         this.load.image('maskSprite', 'maskSprite.png');
         this.load.image('dustParticles', 'dustParticles.png');
+        this.load.image('btnSprite', 'btnSprite.png');
     }
     
     create ()

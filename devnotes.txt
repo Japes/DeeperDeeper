@@ -2,12 +2,34 @@ LDJAM48
 
 free diving :)
 
-rhythm mechanic to go down
+-------------------------------
+
+highscore table 
+publish
+
+basic sound
+    water ambience?
+    heartbeat
+
+opening screen w/instructions
+
+rope with measurements (start at 2m down, or something)
+
+tunnel vision
 visibility getting worse as you get deep
     perhaps need flashes of visibility
-pre-dive breathing minigame
-side minigame for mental state?
+heartbeat (proportional to o2 usage)
+stuff gets darker as you go deeper
 
-highscore table
+3 round format
+
+kick/turn buttons?
+
+better animation
+
+turn around animation
 
 create an animated favicon? https://www.favicon.cc/
+
+pre-dive breathing minigame
+side minigame for mental state?

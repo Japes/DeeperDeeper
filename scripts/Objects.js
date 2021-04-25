@@ -1,3 +1,7 @@
+Number.prototype.clamp = function(min, max) {
+    return Math.min(Math.max(this, min), max);
+  };
+
 class RhythmBar {
     constructor(scene, x, y, width, height) {
         this.scene = scene;
@@ -68,13 +72,7 @@ class OxygenBar {
     }
 
     setLevel (percent) {
-        if(percent < 0) {
-            percent = 0;
-        }
-        if(percent > 1) {
-            percent = 1;
-        }
-        console.log("percent:", percent);
+        percent = percent.clamp(0,1);
         this.lvl.clear()
         this.lvl.fillStyle(0x02abf9, 1);
         this.lvl.fillRect(this.x+1, this.y+1, (this.width-2) * percent, (this.height-2));
@@ -98,10 +96,12 @@ class BackgroundSprite extends Phaser.GameObjects.Sprite {
 }
 
 class ScrollingBackground {
-    constructor(scene) {
+    constructor(scene, pixelsPerMetre) {
         this.scene = scene;
         this.w = this.scene.game.config.width;
         this.h = this.scene.game.config.height;
+        this.pixelsPerMetre = pixelsPerMetre;
+        console.log("pixelsPerMetre: " , pixelsPerMetre)
 
         this.bg1 = this.scene.add.sprite(0, 0, "dustParticles");
         this.bg1.setScale(this.w / this.bg1.width, this.h / this.bg1.height);
@@ -111,14 +111,17 @@ class ScrollingBackground {
         this.bg2.setScale(this.w / this.bg1.width, this.h / this.bg1.height);
         this.bg2.setOrigin(0,0);
 
-        this.speed = 3; //in screen heights/s
+        this.speed = 3; //in m/s
     }
 
     update (time, delta_ms) {
         for (var bg of [this.bg1, this.bg2]) {
-            bg.y = bg.y - this.speed;
+            bg.y = bg.y - this.speed*this.pixelsPerMetre*(delta_ms/1000); //m/s * p/m * s
             if (bg.y < -this.h) {
                 bg.y = this.h;
+            }
+            if (bg.y > this.h) {
+                bg.y = -this.h;
             }
         }
     }
@@ -134,12 +137,13 @@ class Player extends Phaser.GameObjects.Sprite {
         this.anims.create({
             key: 'swim',
             frames: this.anims.generateFrameNumbers('swimmer', { start: 0, end: 8 }),
+            //frames: this.anims.generateFrameNumbers('swimmer', [5,6, 7, 8,0,1,2,3]),
             frameRate: 9, //set this = the num frames, so 1 loop per second
             repeat: 0
         });
         //var numFrames = this.anims.currentAnim.getTotalFrames()
 
-        this.anims.play('swim');
+        // this.anims.play('swim');
         this.anims.timeScale = 0.5;
 
         this.setScale(2, -2);
@@ -147,34 +151,11 @@ class Player extends Phaser.GameObjects.Sprite {
         this.setTint("0x612d82");
     }
 
-    update (time, delta_ms) {
-        if (this.keySpace.isDown)
-        {
-            this.anims.play('swim');
-        }
-
-        //this.anims.timeScale = this.anims.timeScale * 1.001;
-        return;
-        
-        var fingerOffset = 75;
-        var dist = Phaser.Math.Distance.Between(this.x, this.y, 
-            this.scene.input.activePointer.x, 
-            this.scene.input.activePointer.y - fingerOffset);
-
-        if(dist > 10) {
-            this.scene.physics.moveTo(this, 
-                this.scene.input.activePointer.x,
-                this.scene.input.activePointer.y - fingerOffset, this.speed);
-        } else {
-            this.setVelocity(0,0);
-        }
+    kick() {
+        this.anims.play('swim');
     }
 
-    getHit() {
-        if(this.livesDisplay == undefined) {
-            this.kill();
-        }
-
+    /*
         this.setAlpha(0);
         this.scene.tweens.add({
           targets: this,
@@ -183,39 +164,5 @@ class Player extends Phaser.GameObjects.Sprite {
           ease: 'Linear',
           repeat: 4,
         });
-
-        var currentLives = this.livesDisplay.getNumLives();
-        currentLives -= 1;
-        this.livesDisplay.setNumLives(currentLives);
-        if(currentLives < 1) {
-            this.kill();
-        }
-    }
-
-    kill() {
-        if (this.shootTimer !== undefined) {
-            if (this.shootTimer) {
-                this.shootTimer.remove(false);
-            }
-        }
-
-        var e = this.scene.add.sprite(this.x, this.y);
-        e.once(Phaser.Animations.Events.SPRITE_ANIMATION_COMPLETE, () => {
-            e.destroy();
-        });
-        e.anims.play('explode', true);
-
-        this.setData("isDead", true);
-        this.scene.gameOver();
-    }
-
-    //do a victory animation - zoom off up the screen
-    speedOff() {
-        this.victoryAnim = true;
-        //hacky way to disable all collisions with this sprite
-        this.setCollideWorldBounds(false);
-        this.body.setCircle(0.1, 99999, 99999);
-        this.setVelocity(0,-this.speed/2);
-        this.setAcceleration(0,-1000);
-    }
+        */
 }

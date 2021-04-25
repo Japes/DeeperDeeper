@@ -23,10 +23,10 @@ class Button extends Phaser.GameObjects.Sprite {
 class TextButton extends Button {
     constructor(scene, x, y, text, onclick, btnKey) {
         if(btnKey == undefined) {
-            btnKey = "btn";
+            btnKey = "btnSprite";
         }
         super(scene, x, y, btnKey, onclick);
-        this.setScale(1.1);
+        this.setScale(1.25, 0.5);
 
         var style ={ 
             fontSize: 24,
