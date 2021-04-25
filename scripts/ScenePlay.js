@@ -18,7 +18,8 @@ class ScenePlay extends Phaser.Scene {
         this.progress.setDepth(1000); //"UI layer"
 
         this.rhythmBar = new RhythmBar(this, 20, 20, this.w - 40, 80);
-
+        this.oxygenBar = new OxygenBar(this, 20, 110, this.w - 40, 40);
+        
         /*
         this.anims.create({
             key: 'explode',
@@ -39,6 +40,7 @@ class ScenePlay extends Phaser.Scene {
         */
 
         this.player = new Player(this, this.w * 0.5, this.h * 0.5); 
+        this.bg = new ScrollingBackground(this); 
 
         /*
         this.time.addEvent({
@@ -68,6 +70,10 @@ class ScenePlay extends Phaser.Scene {
         //this.tilesprite.tilePositionY -= 2/this.tilesprite.scale;
 
         this.rhythmBar.update(time, delta);
+        this.player.update(time, delta);
+        this.bg.update(time, delta);
+
+        this.oxygenBar.setLevel(this.oxygenBar.getLevel() - 0.001);
 
         //progress
         /*

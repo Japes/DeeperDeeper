@@ -43,48 +43,119 @@ class RhythmBar {
         for (var i of this.indicators) {
             i.x -= (delta_ms/1000)*this.speed;
         }
-        // /this.kick.clear();
-        // /if (this.keySpace.isDown)
-        // /{
-        // /    this.kick.fillStyle(0x00ff00, 1);
-        // /    this.kick.fillRect(10, 10, 50, 50);
-        // /}
     }
 }
 
-class Player extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, spriteKey) {
-        super(scene, x, y, spriteKey);
-
+class OxygenBar {
+    constructor(scene, x, y, width, height) {
         this.scene = scene;
-        this.scene.add.existing(this);
-        this.scene.physics.world.enableBody(this, 0);
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
 
-        this.setData("isDead", false);
+        this.bg = scene.add.graphics();
+        this.bg.setDepth(100);
+        this.bg.fillStyle(0x022ff9, 1);
+        this.bg.fillRect(x, y, width, height);
 
-        this.setScale(0.5);
-        this.speed = 380;
-        this.setData("speed", this.speed);
-        this.setDepth(100);
+        this.lvl = scene.add.graphics();
+        this.lvl.setDepth(101);
+        this.lvl.fillStyle(0x02abf9, 1);
 
-        /*
-        this.shootTimer = this.scene.time.addEvent({
-            delay: 250,
-            callback: function() {
-                var bullet = new Bullet( this.scene, this.x, this.y, 0, -450);
-                this.scene.playerBullets.add(bullet);
-            },
-            callbackScope: this,
-            loop: true
-          });
-          */
-
-        //this.anims.play('coinSpin', true);
-        //this.scene.coins.add(this);
+        this.percent = 1.0;
+        this.setLevel (this.percent);
     }
 
-    update () {
+    setLevel (percent) {
+        if(percent < 0) {
+            percent = 0;
+        }
+        if(percent > 1) {
+            percent = 1;
+        }
+        console.log("percent:", percent);
+        this.lvl.clear()
+        this.lvl.fillStyle(0x02abf9, 1);
+        this.lvl.fillRect(this.x+1, this.y+1, (this.width-2) * percent, (this.height-2));
+        this.percent = percent;
+    }
 
+    getLevel() {
+        return this.percent;
+    }
+}
+
+class BackgroundSprite extends Phaser.GameObjects.Sprite {
+    constructor(scene, width, height) {
+        super(scene, width/2, height/2, "dustParticles");
+        this.scene = scene;
+        this.scene.add.existing(this);
+
+        this.setScale(width / this.width, height / this.height);
+        this.setOrigin(0,0);
+    }
+}
+
+class ScrollingBackground {
+    constructor(scene) {
+        this.scene = scene;
+        this.w = this.scene.game.config.width;
+        this.h = this.scene.game.config.height;
+
+        this.bg1 = this.scene.add.sprite(0, 0, "dustParticles");
+        this.bg1.setScale(this.w / this.bg1.width, this.h / this.bg1.height);
+        this.bg1.setOrigin(0,0);
+
+        this.bg2 = this.scene.add.sprite(0, this.h, "dustParticles");
+        this.bg2.setScale(this.w / this.bg1.width, this.h / this.bg1.height);
+        this.bg2.setOrigin(0,0);
+
+        this.speed = 3; //in screen heights/s
+    }
+
+    update (time, delta_ms) {
+        for (var bg of [this.bg1, this.bg2]) {
+            bg.y = bg.y - this.speed;
+            if (bg.y < -this.h) {
+                bg.y = this.h;
+            }
+        }
+    }
+}
+
+
+class Player extends Phaser.GameObjects.Sprite {
+    constructor(scene, x, y) {
+        super(scene, x, y, "swimmer");
+        this.scene = scene;
+        this.scene.add.existing(this);
+
+        this.anims.create({
+            key: 'swim',
+            frames: this.anims.generateFrameNumbers('swimmer', { start: 0, end: 8 }),
+            frameRate: 9, //set this = the num frames, so 1 loop per second
+            repeat: 0
+        });
+        //var numFrames = this.anims.currentAnim.getTotalFrames()
+
+        this.anims.play('swim');
+        this.anims.timeScale = 0.5;
+
+        this.setScale(2, -2);
+        this.keySpace = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.setTint("0x612d82");
+    }
+
+    update (time, delta_ms) {
+        if (this.keySpace.isDown)
+        {
+            this.anims.play('swim');
+        }
+
+        //this.anims.timeScale = this.anims.timeScale * 1.001;
+        return;
+        
         var fingerOffset = 75;
         var dist = Phaser.Math.Distance.Between(this.x, this.y, 
             this.scene.input.activePointer.x, 
