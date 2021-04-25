@@ -125,6 +125,7 @@ class ScenePlay extends Phaser.Scene {
             this.displayMsg("Success!\n**" + this.maxDepth.toFixed(2) + "m**");
             this.retryBtn.enable(true);
             this.gameOver = true;
+            //this.submitHighScore("testjp2", this.maxDepth);
         } else if(this.o2lvl <= 0) {
             this.displayMsg("U DED :(");
             this.retryBtn.enable(true);
@@ -153,6 +154,12 @@ class ScenePlay extends Phaser.Scene {
         this.retryBtn.setScale(1.2);
         */
 
+        this.submitBtn = new TextButton(this, this.w * 0.5, this.h * 0.75,
+            "submit high score", function() { 
+                g_currentScore = this.maxDepth;
+                this.scene.scene.start("SceneSubmitScore"); });
+        this.submitBtn.enable(false);
+
         this.retryBtn = new TextButton(this, this.w * 0.5, this.h * 0.75,
             "AGAIN!", function() { this.scene.scene.start("ScenePlay"); });
         this.retryBtn.enable(false);
@@ -163,33 +170,5 @@ class ScenePlay extends Phaser.Scene {
         var winText = this.add.text(this.w/2, this.h/2, text, this.msgStyle);
         winText.setOrigin(0.5);
         winText.setDepth(1000);
-    }
-
-    levelComplete()
-    {
-        if(this.stateGameOver) {
-            return;
-        }
-
-        this.stateComplete = true;
-
-        this.displayMsg("LEVEL COMPLETE!");
-
-        this.lvlCompleteBtn.enable(true);
-
-        this.player.speedOff();
-    }
-
-    gameOver ()
-    {
-        if(this.stateComplete) {
-            return;
-        }
-
-        this.displayMsg("GAME OVER :(");
-
-        this.stateGameOver = true;
-        this.retryBtn.enable(true);
-        this.menuBtn.enable(true);
     }
   }

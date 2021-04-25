@@ -1,3 +1,5 @@
+g_currentScore = 0;
+
 class SceneMainMenu extends Phaser.Scene {
     constructor() {
       super({ key: "SceneMainMenu" });

@@ -1,8 +1,9 @@
 #######create scripts
 
-CREATE TABLE `RB_PlaySessions` (
+CREATE TABLE `DD_PlaySessions` (
    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
    `date` DATETIME NULL,
-   `user` VARCHAR(255) NOT NULL DEFAULT 'anon'
+   `name` VARCHAR(255) NOT NULL,
+   `score` FLOAT NOT NULL
 )
 

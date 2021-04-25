@@ -5,11 +5,15 @@ free diving :)
 -------------------------------
 
 highscore table 
+
 publish
+
+indicate that it's O2 and tint based on usage
 
 basic sound
     water ambience?
     heartbeat
+
 
 opening screen w/instructions
 
