@@ -50,6 +50,7 @@ class RhythmBar {
     }
 }
 
+//TODO extract into generic progress bar util
 class OxygenBar {
     constructor(scene, x, y, width, height) {
         this.scene = scene;
@@ -67,14 +68,39 @@ class OxygenBar {
         this.lvl.setDepth(101);
         this.lvl.fillStyle(0x02abf9, 1);
 
+        this.msgStyle ={ 
+            fontSize: 30,
+            fontFamily: 'Arial',
+            align: "center",
+            fill: "#f98304",
+            fixedWidth: width,
+            fixedHeight: height,
+            //wordWrap: { width: this.w*0.9, height: this.h, useAdvancedWrap: true }
+        };
+
+        this.label = this.scene.add.text(x, y, "OXYGEN", this.msgStyle);
+        //this.label.setOrigin(0.5);
+        this.label.setDepth(102);
+
         this.percent = 1.0;
         this.setLevel (this.percent);
     }
 
-    setLevel (percent) {
+    setLevel (percent, dangerLvl) {
         percent = percent.clamp(0,1);
+        if(dangerLvl == undefined) {
+            dangerLvl = 0
+        }
+        dangerLvl = dangerLvl.clamp(0,1);
         this.lvl.clear()
-        this.lvl.fillStyle(0x02abf9, 1);
+        
+        var safeColor = new Phaser.Display.Color(2, 171, 249); //can use ValueToColor
+        var dangerousColor = new Phaser.Display.Color(159, 2, 249);
+        
+        var hexColor = Phaser.Display.Color.Interpolate.ColorWithColor(safeColor, dangerousColor, 100, dangerLvl*100);
+        var hexString = Phaser.Display.Color.GetColor(hexColor.r, hexColor.g, hexColor.b, hexColor.a);
+
+        this.lvl.fillStyle(hexString, 1);
         this.lvl.fillRect(this.x+1, this.y+1, (this.width-2) * percent, (this.height-2));
         this.percent = percent;
     }

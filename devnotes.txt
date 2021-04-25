@@ -4,10 +4,6 @@ free diving :)
 
 -------------------------------
 
-indicate that it's O2 and tint based on usage
-
-informative text while playing
-
 stuff gets darker as you go deeper
 
 basic sound
@@ -45,3 +41,6 @@ side minigame for mental state?
 MOBILE FRIENDLY
     tap controls
     enter name :/
+
+a lot of the stuff can be extracted into utils 
+find a less hacky way of ensuring that the score has persisted to the db

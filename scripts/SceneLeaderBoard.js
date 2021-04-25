@@ -14,29 +14,40 @@ class SceneLeaderBoard extends Phaser.Scene {
 
         this.setupButtons();
 
-        this.getHighScores();
 
         this.scoresJson = "";
         this.haveDisplayed = false;
+
+        let msgStyle ={ 
+            fontSize: 20,
+            //fontFamily: 'Arial',
+            //align: "center",
+            fill: "#ffffff",
+            //wordWrap: { width: this.w, height: this.h, useAdvancedWrap: false }
+        };
+
+        this.boardText = this.add.text(this.w/2, this.h/2, "", msgStyle);
+        this.boardText.setOrigin(0.5);
+
+        //hacky way of ensuring that the last submitted score has reached the db
+        this.indicatorTimer = this.time.addEvent({
+            delay: 500,
+            callback: function() {
+                this.getHighScores();
+            },
+            callbackScope: this,
+            loop: false
+          });
     }
     
     update (time, delta_ms)
     {
         if(this.scoresJson == "") {
-            //"loading..."
+            this.boardText.text = "loading...";
+
         } else if (!this.haveDisplayed) {
+            this.boardText.text = "";
 
-            let msgStyle ={ 
-                fontSize: 20,
-                //fontFamily: 'Arial',
-                //align: "center",
-                fill: "#ffffff",
-                //wordWrap: { width: this.w, height: this.h, useAdvancedWrap: false }
-            };
-
-            this.boardText = this.add.text(this.w/2, this.h/2, "", msgStyle);
-            this.boardText.setOrigin(0.5);
-            
             var rank = 1;
             for (var result of this.scoresJson["results"]) {
 

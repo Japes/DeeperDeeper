@@ -31,6 +31,8 @@ class ScenePlay extends Phaser.Scene {
 
         this.goingDown = true;
         this.gameOver = false;
+        this.haveReachedMax = false;
+
 
         this.inputField = new InputField(this, "Name:", this.h * 0.6);
         this.inputField.setVisible(false);
@@ -100,16 +102,27 @@ class ScenePlay extends Phaser.Scene {
 
         if(this.depth > this.maxDepth) {
             this.maxDepth = this.depth;
+        } else {
+            this.haveReachedMax = true;
         }
         
         //update visuals
         this.bg.speed = this.speed;
-        this.oxygenBar.setLevel(this.o2lvl);
+        this.oxygenBar.setLevel(this.o2lvl, this.o2usage / 0.06 );
 
         //log
-        this.maxDepthText.text = "max depth: " + this.maxDepth.toFixed(2) + "m";
-        this.depthText.text = "depth: " + this.depth.toFixed(2) + "m";
-        this.speedText.text = "speed: " + this.speed.toFixed(2) + "m/s";
+        if(this.gameOver) {
+            this.maxDepthText.text = "";
+            this.depthText.text = "";
+            this.speedText.text = "";
+            this.infoText.text = "";
+        } else {
+            this.depthText.text = "depth: " + this.depth.toFixed(2) + "m";
+            this.speedText.text = "speed: " + Math.abs(this.speed).toFixed(2) + "m/s";
+            if(this.haveReachedMax) {
+                this.maxDepthText.text = "max depth: " + this.maxDepth.toFixed(2) + "m";
+            }
+        }
     }
 
     checkForEndState()
@@ -120,12 +133,15 @@ class ScenePlay extends Phaser.Scene {
 
         if(!this.goingDown && this.depth <= 0) {
             this.displayMsg("Success!\nYou reached:\n**" + this.maxDepth.toFixed(2) + "m**");
+            this.inputField.setVisible(true);
+
             this.retryBtn.enable(true);
             this.gameOver = true;
-            this.inputField.setVisible(true);
 
         } else if(this.o2lvl <= 0) {
             this.displayMsg("Dive failed...");
+
+            //TODO DRY
             this.retryBtn.enable(true);
             this.gameOver = true;
         }
@@ -133,14 +149,17 @@ class ScenePlay extends Phaser.Scene {
 
     setupText()
     {
-        this.maxDepthText = this.add.text(this.w/2, this.h/8, "");
-        this.maxDepthText.setOrigin(0.5);
-
-        this.depthText = this.add.text(this.w/2, this.h*3.5/4, "");
+        this.depthText = this.add.text(this.w/2, this.h*0.1, "");
         this.depthText.setOrigin(0.5);
 
-        this.speedText = this.add.text(this.w/2, this.h*3.7/4, "");
+        this.speedText = this.add.text(this.w/2, this.h*0.14, "");
         this.speedText.setOrigin(0.5);
+
+        this.maxDepthText = this.add.text(this.w/2, this.h*0.18, "");
+        this.maxDepthText.setOrigin(0.5);
+
+        this.infoText = this.add.text(this.w/2, this.h*0.9, "SPACEBAR to kick.\nENTER to turn back.");
+        this.infoText.setOrigin(0.5);
     }
 
     setupButtons()
@@ -154,7 +173,6 @@ class ScenePlay extends Phaser.Scene {
         this.submitBtn = new TextButton(this, this.w * 0.5, this.h * 0.8,
             "submit score", function() { 
                 this.submitHighScore(this.inputField.getFieldString(), this.maxDepth); 
-                this.scene.start("SceneLeaderBoard");
             }, this);
         this.submitBtn.enable(false);
 
@@ -169,8 +187,8 @@ class ScenePlay extends Phaser.Scene {
             fontSize: 60,
             fontFamily: 'Arial',
             align: "center",
-            //fill: "#ffffff",
-            fill: "#000000",
+            fill: "#ffffff",
+            //fill: "#000000",
             wordWrap: { width: this.w, height: this.h, useAdvancedWrap: true }
         };
 
@@ -192,6 +210,7 @@ class ScenePlay extends Phaser.Scene {
 
         Http.onreadystatechange = (e) => {
             console.log('submitHighScore http response: ' + Http.responseText)
+            this.scene.start("SceneLeaderBoard");
         }
     }
 }
