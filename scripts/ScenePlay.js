@@ -14,17 +14,8 @@ class ScenePlay extends Phaser.Scene {
 
         //this.rhythmBar = new RhythmBar(this, 20, 20, this.w - 40, 80);
         this.oxygenBar = new OxygenBar(this, 20, 20, this.w - 40, 40);
-        
-        this.msgStyle ={ 
-            fontSize: 50,
-            fontFamily: 'Arial',
-            align: "center",
-            fill: "#ffffff",
-            wordWrap: { width: this.w, height: this.h, useAdvancedWrap: true }
-        };
 
         this.player = new Player(this, this.w * 0.5, this.h * 0.5); 
-        console.log("swimmer frame height:", this.player.displayHeight)
         this.bg = new ScrollingBackground(this, (this.player.displayHeight*3/4) / 3); //reference for 1m is 3x the swimmers body
         this.depth = 0;
         this.maxDepth = 0;
@@ -41,6 +32,9 @@ class ScenePlay extends Phaser.Scene {
         this.goingDown = true;
         this.gameOver = false;
 
+        this.inputField = new InputField(this, "Name:", this.h * 0.6);
+        this.inputField.setVisible(false);
+
         this.setupButtons();
         this.setupText();
         
@@ -52,6 +46,9 @@ class ScenePlay extends Phaser.Scene {
     {
         //this.rhythmBar.update(time, delta_ms);
         this.bg.update(time, delta_ms);
+        this.inputField.update();
+        var canSubmit = (this.inputField.getFieldString().length > 0);
+        this.submitBtn.enable(canSubmit);
 
         var delta_s = delta_ms/1000;
         
@@ -93,7 +90,7 @@ class ScenePlay extends Phaser.Scene {
         this.o2usage -= 0.01 * delta_s; //recovery
         this.o2usage = this.o2usage.clamp(0.01,100); //base oxygen usage
 
-        if(this.depth <= 0) {
+        if(this.depth <= 0 && this.o2lvl > 0) {
             this.o2usage = -0.4; //breathing again
         }
 
@@ -122,12 +119,13 @@ class ScenePlay extends Phaser.Scene {
         }
 
         if(!this.goingDown && this.depth <= 0) {
-            this.displayMsg("Success!\n**" + this.maxDepth.toFixed(2) + "m**");
+            this.displayMsg("Success!\nYou reached:\n**" + this.maxDepth.toFixed(2) + "m**");
             this.retryBtn.enable(true);
             this.gameOver = true;
-            //this.submitHighScore("testjp2", this.maxDepth);
+            this.inputField.setVisible(true);
+
         } else if(this.o2lvl <= 0) {
-            this.displayMsg("U DED :(");
+            this.displayMsg("Dive failed...");
             this.retryBtn.enable(true);
             this.gameOver = true;
         }
@@ -153,22 +151,47 @@ class ScenePlay extends Phaser.Scene {
         this.retryBtn.enable(false);
         this.retryBtn.setScale(1.2);
         */
-
-        this.submitBtn = new TextButton(this, this.w * 0.5, this.h * 0.75,
-            "submit high score", function() { 
-                g_currentScore = this.maxDepth;
-                this.scene.scene.start("SceneSubmitScore"); });
+        this.submitBtn = new TextButton(this, this.w * 0.5, this.h * 0.8,
+            "submit score", function() { 
+                this.submitHighScore(this.inputField.getFieldString(), this.maxDepth); 
+                this.scene.start("SceneLeaderBoard");
+            }, this);
         this.submitBtn.enable(false);
 
-        this.retryBtn = new TextButton(this, this.w * 0.5, this.h * 0.75,
+        this.retryBtn = new TextButton(this, this.w * 0.5, this.h * 0.925,
             "AGAIN!", function() { this.scene.scene.start("ScenePlay"); });
         this.retryBtn.enable(false);
     }
 
     displayMsg(text)
     {
-        var winText = this.add.text(this.w/2, this.h/2, text, this.msgStyle);
+        let msgStyle ={ 
+            fontSize: 60,
+            fontFamily: 'Arial',
+            align: "center",
+            //fill: "#ffffff",
+            fill: "#000000",
+            wordWrap: { width: this.w, height: this.h, useAdvancedWrap: true }
+        };
+
+        var winText = this.add.text(this.w/2, this.h/3, text, msgStyle);
         winText.setOrigin(0.5);
         winText.setDepth(1000);
     }
-  }
+
+    submitHighScore(name, score) {
+        
+        //const hash = md5(user + _secretKey); //todo not using this, md5 is not the best anyway
+
+        const Http = new XMLHttpRequest();
+        const server='https://jpandaliciawedding.co.za';
+        const path='/gamesDatabase/DeeperDeeper/submitHighScore.php';
+        const args='?name=' + name + "&score=" + score;
+        Http.open("GET", server + path + args);
+        Http.send();
+
+        Http.onreadystatechange = (e) => {
+            console.log('submitHighScore http response: ' + Http.responseText)
+        }
+    }
+}

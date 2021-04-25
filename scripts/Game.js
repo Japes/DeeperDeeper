@@ -17,7 +17,8 @@ var config = {
     },
     scene: [
         SceneMainMenu,
-        ScenePlay
+        ScenePlay,
+        SceneLeaderBoard
     ]
 };
 

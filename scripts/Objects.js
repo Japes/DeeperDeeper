@@ -101,7 +101,6 @@ class ScrollingBackground {
         this.w = this.scene.game.config.width;
         this.h = this.scene.game.config.height;
         this.pixelsPerMetre = pixelsPerMetre;
-        console.log("pixelsPerMetre: " , pixelsPerMetre)
 
         this.bg1 = this.scene.add.sprite(0, 0, "dustParticles");
         this.bg1.setScale(this.w / this.bg1.width, this.h / this.bg1.height);
@@ -127,6 +126,126 @@ class ScrollingBackground {
     }
 }
 
+
+class InputField {
+    constructor(scene, headerText, y) {
+
+        this.scene = scene;
+
+        this.w = this.scene.game.config.width;
+        this.h = this.scene.game.config.height;
+
+        this.msgStyle ={ 
+            fontSize: 50,
+            fontFamily: 'Arial',
+            align: "center",
+            fill: "#ffffff",
+            wordWrap: { width: this.w*0.9, height: this.h, useAdvancedWrap: true }
+        };
+
+        this.fieldString = "";
+        this.maxLength = 9;
+        
+        this.headerText = this.scene.add.text(this.w/2, y, headerText, this.msgStyle);
+        this.headerText.setOrigin(0.5);
+
+        this.fieldText = this.scene.add.text(this.w*0.05, y + this.headerText.displayHeight/2 + 5, this.fieldString, this.msgStyle);
+        this.fieldText.setDepth(10);
+        
+        var borderWidth = 5;
+        this.inputBg = this.scene.add.graphics();
+        this.inputBg.fillStyle(0x022ff9, 1);
+        this.inputBg.fillRect(this.fieldText.x - borderWidth, this.fieldText.y - borderWidth, 
+                                this.w*0.9 + borderWidth*2, this.fieldText.displayHeight + borderWidth*2);
+
+        this.keyA = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.keyB = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
+        this.keyC = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
+        this.keyD = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        this.keyE = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        this.keyF = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        this.keyG = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G);
+        this.keyH = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
+        this.keyI = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
+        this.keyJ = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J);
+        this.keyK = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K);
+        this.keyL = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
+        this.keyM = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+        this.keyN = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N);
+        this.keyO = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
+        this.keyP = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+        this.keyQ = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+        this.keyR = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        this.keyS = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.keyT = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+        this.keyU = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
+        this.keyV = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
+        this.keyW = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        this.keyX = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
+        this.keyY = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Y);
+        this.keyZ = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+        this.keySpace = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.keyBack = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.BACKSPACE);
+
+        this.setVisible(true);
+        this.enabled = true;
+    }
+
+    update (time, delta_ms)
+    {
+        if(!this.enabled) {
+            return;
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(this.keyA)) { this.fieldString += "A"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyB)) { this.fieldString += "B"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyC)) { this.fieldString += "C"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyD)) { this.fieldString += "D"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyE)) { this.fieldString += "E"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyF)) { this.fieldString += "F"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyG)) { this.fieldString += "G"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyH)) { this.fieldString += "H"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyI)) { this.fieldString += "I"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyJ)) { this.fieldString += "J"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyK)) { this.fieldString += "K"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyL)) { this.fieldString += "L"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyM)) { this.fieldString += "M"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyN)) { this.fieldString += "N"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyO)) { this.fieldString += "O"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyP)) { this.fieldString += "P"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyQ)) { this.fieldString += "Q"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyR)) { this.fieldString += "R"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyS)) { this.fieldString += "S"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyT)) { this.fieldString += "T"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyU)) { this.fieldString += "U"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyV)) { this.fieldString += "V"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyW)) { this.fieldString += "W"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyX)) { this.fieldString += "X"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyY)) { this.fieldString += "Y"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyZ)) { this.fieldString += "Z"; }
+        if (Phaser.Input.Keyboard.JustDown(this.keySpace)) { this.fieldString += " "; }
+        if (Phaser.Input.Keyboard.JustDown(this.keyBack)) { this.fieldString = this.fieldString.slice(0, -1); }
+
+        if (this.fieldString.length > this.maxLength) {
+            this.fieldString = this.fieldString.slice(0, this.maxLength - this.fieldString.length);
+        }
+
+        this.fieldText.text = this.fieldString;
+    }
+
+    getFieldString()
+    {
+        return this.fieldString;
+    }
+
+    setVisible(enable)
+    {
+        this.enabled = enable;
+        this.inputBg.setVisible(enable);
+        this.headerText.setVisible(enable);
+        this.fieldText.setVisible(enable);
+    }
+}
 
 class Player extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {

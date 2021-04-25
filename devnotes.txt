@@ -4,18 +4,23 @@ free diving :)
 
 -------------------------------
 
-highscore table 
-
-publish
-
 indicate that it's O2 and tint based on usage
+
+informative text while playing
+
+stuff gets darker as you go deeper
 
 basic sound
     water ambience?
     heartbeat
 
 
-opening screen w/instructions
+MainMenu
+    opening screen w/instructions
+
+protect sql entries
+
+bubbles when you kick...
 
 rope with measurements (start at 2m down, or something)
 
@@ -23,11 +28,10 @@ tunnel vision
 visibility getting worse as you get deep
     perhaps need flashes of visibility
 heartbeat (proportional to o2 usage)
-stuff gets darker as you go deeper
 
 3 round format
 
-kick/turn buttons?
+kick/turn tappable buttons?
 
 better animation
 
@@ -37,3 +41,7 @@ create an animated favicon? https://www.favicon.cc/
 
 pre-dive breathing minigame
 side minigame for mental state?
+
+MOBILE FRIENDLY
+    tap controls
+    enter name :/

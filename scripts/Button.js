@@ -1,12 +1,15 @@
 class Button extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, imgKey, onclick) {
+    constructor(scene, x, y, imgKey, onclick, context) {
         super(scene, x, y, imgKey);
         this.scene = scene;
         this.scene.add.existing(this);
         this.setDepth(1000); //higher values rendered later
         this.setInteractive();
         //You can also do pointerover, pointerup, etc
-        this.on("pointerdown", onclick, this);
+        if(context == undefined) {
+            context = this;
+        }
+        this.on("pointerdown", onclick, context);
     }
 
     enable(show)
@@ -21,11 +24,11 @@ class Button extends Phaser.GameObjects.Sprite {
 }
 
 class TextButton extends Button {
-    constructor(scene, x, y, text, onclick, btnKey) {
+    constructor(scene, x, y, text, onclick, context, btnKey) {
         if(btnKey == undefined) {
             btnKey = "btnSprite";
         }
-        super(scene, x, y, btnKey, onclick);
+        super(scene, x, y, btnKey, onclick, context);
         this.setScale(1.25, 0.5);
 
         var style ={ 
