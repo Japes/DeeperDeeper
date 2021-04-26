@@ -122,17 +122,17 @@ class BackgroundSprite extends Phaser.GameObjects.Sprite {
 }
 
 class ScrollingBackground {
-    constructor(scene, pixelsPerMetre) {
+    constructor(scene, pixelsPerMetre, spriteKey) {
         this.scene = scene;
         this.w = this.scene.game.config.width;
         this.h = this.scene.game.config.height;
         this.pixelsPerMetre = pixelsPerMetre;
 
-        this.bg1 = this.scene.add.sprite(0, 0, "dustParticles");
+        this.bg1 = this.scene.add.sprite(0, 0, spriteKey);
         this.bg1.setScale(this.w / this.bg1.width, this.h / this.bg1.height);
         this.bg1.setOrigin(0,0);
 
-        this.bg2 = this.scene.add.sprite(0, this.h, "dustParticles");
+        this.bg2 = this.scene.add.sprite(0, this.h, spriteKey);
         this.bg2.setScale(this.w / this.bg1.width, this.h / this.bg1.height);
         this.bg2.setOrigin(0,0);
 

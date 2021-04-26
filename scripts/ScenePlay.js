@@ -16,7 +16,8 @@ class ScenePlay extends Phaser.Scene {
         this.oxygenBar = new OxygenBar(this, 20, 20, this.w - 40, 40);
 
         this.player = new Player(this, this.w * 0.5, this.h * 0.5); 
-        this.bg = new ScrollingBackground(this, (this.player.displayHeight*3/4) / 3); //reference for 1m is 3x the swimmers body
+        this.bg = new ScrollingBackground(this, (this.player.displayHeight*3/4) / 3, "dustParticles"); //reference for 1m is 3x the swimmers body
+        this.bg2 = new ScrollingBackground(this, (this.player.displayHeight*3/4) / 3, "dustParticles2"); //reference for 1m is 3x the swimmers body
         this.depth = 0;
         this.maxDepth = 0;
 
@@ -48,6 +49,8 @@ class ScenePlay extends Phaser.Scene {
     {
         //this.rhythmBar.update(time, delta_ms);
         this.bg.update(time, delta_ms);
+        this.bg2.update(time, delta_ms);
+
         this.inputField.update();
         var canSubmit = (this.inputField.getFieldString().length > 0);
         this.submitBtn.enable(canSubmit);
@@ -108,7 +111,15 @@ class ScenePlay extends Phaser.Scene {
         
         //update visuals
         this.bg.speed = this.speed;
+        this.bg2.speed = this.speed/2;
         this.oxygenBar.setLevel(this.o2lvl, this.o2usage / 0.06 );
+
+        //tween background colour
+        //TODO make this a tint from the bottom on a background image
+        var surfaceColor = new Phaser.Display.Color(76, 199, 224);
+        var deepColor = new Phaser.Display.Color.ValueToColor(0x02011c);
+        var hexColor = Phaser.Display.Color.Interpolate.ColorWithColor(surfaceColor, deepColor, 40, this.depth.clamp(0, 40));
+        this.cameras.main.setBackgroundColor(hexColor);
 
         //log
         if(this.gameOver) {

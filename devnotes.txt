@@ -4,17 +4,24 @@ free diving :)
 
 -------------------------------
 
+dive failed blackout...
+
 stuff gets darker as you go deeper
+    make this a tint on a texture, so there is a gradient towards the bottom
 
 basic sound
     water ambience?
     heartbeat
 
-
 MainMenu
     opening screen w/instructions
 
+better animation
+
 protect sql entries
+    looks like there is a fundamental weakness with server-side code using apis...
+    could at least obfuscate
+    could encrypt and send like i do with unit, will still be able to find the encryption key in the source but at least you cant just copy/paste the url
 
 bubbles when you kick...
 
@@ -25,11 +32,15 @@ visibility getting worse as you get deep
     perhaps need flashes of visibility
 heartbeat (proportional to o2 usage)
 
+MOBILE FRIENDLY
+    resolution issues?
+    tap controls
+    enter name :/
+
 3 round format
 
 kick/turn tappable buttons?
 
-better animation
 
 turn around animation
 
@@ -38,9 +49,6 @@ create an animated favicon? https://www.favicon.cc/
 pre-dive breathing minigame
 side minigame for mental state?
 
-MOBILE FRIENDLY
-    tap controls
-    enter name :/
 
 a lot of the stuff can be extracted into utils 
 find a less hacky way of ensuring that the score has persisted to the db
