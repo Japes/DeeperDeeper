@@ -57,6 +57,9 @@ class ScenePlay extends Phaser.Scene {
         
         this.stateGameOver = false;
         this.stateComplete = false;
+
+        this.music = this.sound.add('ambientLoop');
+        this.music.play({loop : true});
     }
     
     update (time, delta_ms)
