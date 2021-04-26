@@ -18,6 +18,20 @@ class ScenePlay extends Phaser.Scene {
         this.player = new Player(this, this.w * 0.5, this.h * 0.5); 
         this.bg = new ScrollingBackground(this, (this.player.displayHeight*3/4) / 3, "dustParticles"); //reference for 1m is 3x the swimmers body
         this.bg2 = new ScrollingBackground(this, (this.player.displayHeight*3/4) / 3, "dustParticles2"); //reference for 1m is 3x the swimmers body
+
+        var blackoutColour = 0x680d01;
+        this.blackout = this.add.image(0, 0, "blackout");
+        this.blackout.setScale(this.w / this.blackout.width, this.h / this.blackout.height);
+        this.blackout.setOrigin(0,0);
+        this.blackout.setAlpha(0);
+        this.blackout.setTint(blackoutColour);
+
+        this.totalBlackout = this.add.image(0, 0, "white");
+        this.totalBlackout.setScale(this.w / this.totalBlackout.width, this.h / this.totalBlackout.height);
+        this.totalBlackout.setOrigin(0,0);
+        this.totalBlackout.setAlpha(0);
+        this.totalBlackout.setTint(blackoutColour);
+
         this.depth = 0;
         this.maxDepth = 0;
 
@@ -77,7 +91,7 @@ class ScenePlay extends Phaser.Scene {
             this.player.setScale(this.player.scaleX, -this.player.scaleY);
         }
 
-        this.checkForEndState();
+        this.checkForEndState(delta_ms);
 
         // "physics simulation"
         var friction = 0.1 * this.speed*this.speed * delta_s; //decelleration due to friction is proportional to v^2
@@ -121,6 +135,8 @@ class ScenePlay extends Phaser.Scene {
         var hexColor = Phaser.Display.Color.Interpolate.ColorWithColor(surfaceColor, deepColor, 40, this.depth.clamp(0, 40));
         this.cameras.main.setBackgroundColor(hexColor);
 
+        this.blackout.setAlpha( (1 - this.o2lvl) * (1 - this.o2lvl) * (1 - this.o2lvl));
+
         //log
         if(this.gameOver) {
             this.maxDepthText.text = "";
@@ -136,13 +152,9 @@ class ScenePlay extends Phaser.Scene {
         }
     }
 
-    checkForEndState()
+    checkForEndState(delta_ms)
     {
-        if(this.gameOver) {
-            return;
-        }
-
-        if(!this.goingDown && this.depth <= 0) {
+        if(!this.goingDown && this.depth <= 0 && !this.gameOver) {
             this.displayMsg("Success!\nYou reached:\n**" + this.maxDepth.toFixed(2) + "m**");
             this.inputField.setVisible(true);
 
@@ -151,6 +163,7 @@ class ScenePlay extends Phaser.Scene {
 
         } else if(this.o2lvl <= 0) {
             this.displayMsg("Dive failed...");
+            this.totalBlackout.setAlpha(this.totalBlackout.alpha + delta_ms*0.0004);
 
             //TODO DRY
             this.retryBtn.enable(true);

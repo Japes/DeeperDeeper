@@ -110,17 +110,6 @@ class OxygenBar {
     }
 }
 
-class BackgroundSprite extends Phaser.GameObjects.Sprite {
-    constructor(scene, width, height) {
-        super(scene, width/2, height/2, "dustParticles");
-        this.scene = scene;
-        this.scene.add.existing(this);
-
-        this.setScale(width / this.width, height / this.height);
-        this.setOrigin(0,0);
-    }
-}
-
 class ScrollingBackground {
     constructor(scene, pixelsPerMetre, spriteKey) {
         this.scene = scene;
@@ -128,11 +117,11 @@ class ScrollingBackground {
         this.h = this.scene.game.config.height;
         this.pixelsPerMetre = pixelsPerMetre;
 
-        this.bg1 = this.scene.add.sprite(0, 0, spriteKey);
+        this.bg1 = this.scene.add.image(0, 0, spriteKey);
         this.bg1.setScale(this.w / this.bg1.width, this.h / this.bg1.height);
         this.bg1.setOrigin(0,0);
 
-        this.bg2 = this.scene.add.sprite(0, this.h, spriteKey);
+        this.bg2 = this.scene.add.image(0, this.h, spriteKey);
         this.bg2.setScale(this.w / this.bg1.width, this.h / this.bg1.height);
         this.bg2.setOrigin(0,0);
 
@@ -151,7 +140,6 @@ class ScrollingBackground {
         }
     }
 }
-
 
 class InputField {
     constructor(scene, headerText, y) {
