@@ -225,6 +225,8 @@ class ScenePlay extends Phaser.Scene {
         
         //const hash = md5(user + _secretKey); //todo not using this, md5 is not the best anyway
 
+        name = name.trim();
+
         const Http = new XMLHttpRequest();
         const server='https://jpandaliciawedding.co.za';
         const path='/gamesDatabase/DeeperDeeper/submitHighScore.php';
