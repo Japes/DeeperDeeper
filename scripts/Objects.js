@@ -94,8 +94,8 @@ class OxygenBar {
         dangerLvl = dangerLvl.clamp(0,1);
         this.lvl.clear()
         
-        var safeColor = new Phaser.Display.Color(2, 171, 249); //can use ValueToColor
-        var dangerousColor = new Phaser.Display.Color(159, 2, 249);
+        var safeColor = new Phaser.Display.Color.ValueToColor(0x05dffc);
+        var dangerousColor = new Phaser.Display.Color.ValueToColor(0xfc05b2);
         
         var hexColor = Phaser.Display.Color.Interpolate.ColorWithColor(safeColor, dangerousColor, 100, dangerLvl*100);
         var hexString = Phaser.Display.Color.GetColor(hexColor.r, hexColor.g, hexColor.b, hexColor.a);
