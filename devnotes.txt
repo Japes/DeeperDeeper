@@ -4,19 +4,16 @@ free diving :)
 
 -------------------------------
 
-dive failed blackout...
-
-stuff gets darker as you go deeper
-    make this a tint on a texture, so there is a gradient towards the bottom
-
 basic sound
     water ambience?
     heartbeat
+    
+stuff gets darker as you go deeper
+    make this a tint on a texture, so there is a gradient towards the bottom
+
 
 MainMenu
     opening screen w/instructions
-
-better animation
 
 protect sql entries
     looks like there is a fundamental weakness with server-side code using apis...
@@ -40,7 +37,6 @@ MOBILE FRIENDLY
 3 round format
 
 kick/turn tappable buttons?
-
 
 turn around animation
 

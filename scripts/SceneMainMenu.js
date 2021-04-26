@@ -18,7 +18,7 @@ class SceneMainMenu extends Phaser.Scene {
         this.load.setBaseURL('assets');
         
         //this.load.image('txtBtn4', 'buttons2/txtBtn4.png');
-        this.load.spritesheet('swimmer', 'swimmer.png', { frameWidth: 64, frameHeight: 256 } );
+        this.load.spritesheet('swimmer', 'swimmer4_exported_2.png', { frameWidth: 128, frameHeight: 256 } );
         this.load.image('breathIndicator', 'breathIndicator.png');
         this.load.image('maskSprite', 'maskSprite.png');
         this.load.image('dustParticles', 'dustParticles.png');

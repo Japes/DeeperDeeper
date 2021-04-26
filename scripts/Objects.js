@@ -269,9 +269,9 @@ class Player extends Phaser.GameObjects.Sprite {
 
         this.anims.create({
             key: 'swim',
-            frames: this.anims.generateFrameNumbers('swimmer', { start: 0, end: 8 }),
+            frames: this.anims.generateFrameNumbers('swimmer', { start: 0, end: 28 }),
             //frames: this.anims.generateFrameNumbers('swimmer', [5,6, 7, 8,0,1,2,3]),
-            frameRate: 9, //set this = the num frames, so 1 loop per second
+            frameRate: 29, //set this = the num frames, so 1 loop per second
             repeat: 0
         });
         //var numFrames = this.anims.currentAnim.getTotalFrames()
