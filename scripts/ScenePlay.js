@@ -45,7 +45,6 @@ class ScenePlay extends Phaser.Scene {
         this.keyEnter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
 
         this.goingDown = true;
-        this.gameOver = false;
         this.haveReachedMax = false;
 
 
@@ -55,8 +54,8 @@ class ScenePlay extends Phaser.Scene {
         this.setupButtons();
         this.setupText();
         
-        this.stateGameOver = false;
-        this.stateComplete = false;
+        this.statestarted = false;
+        this.stateDead = false;
 
         this.music = this.sound.add('ambientLoop');
         this.music.play({loop : true});
@@ -64,39 +63,48 @@ class ScenePlay extends Phaser.Scene {
     
     update (time, delta_ms)
     {
+        var kicked = false;
+        if (Phaser.Input.Keyboard.JustDown(this.keySpace)) {
+            this.statestarted = true;
+            kicked = true; //JustDown only returns true on the first call...
+        }
+
         //this.rhythmBar.update(time, delta_ms);
+        this.bg.speed = this.speed;
+        this.bg2.speed = this.speed/2;
         this.bg.update(time, delta_ms);
         this.bg2.update(time, delta_ms);
+
+        if(!this.statestarted) {
+            return; 
+        }
 
         this.inputField.update();
         var canSubmit = (this.inputField.getFieldString().length > 0);
         this.submitBtn.enable(canSubmit);
-
-        var delta_s = delta_ms/1000;
         
-        if (Phaser.Input.Keyboard.JustDown(this.keySpace) && !this.gameOver)
-        {
+        var gameOver = this.checkForEndState(delta_ms);
+
+        if (kicked && !gameOver) {
             var kickspeed = 1.5;
             if(this.goingDown) {
                 this.speed += kickspeed;
             } else {
                 this.speed -= kickspeed;
             }
-
+            
             this.player.kick();
             this.o2usage += 0.03;
         }
         
-        if (Phaser.Input.Keyboard.JustDown(this.keyEnter) && this.goingDown && !this.gameOver)
-        {
+        if (Phaser.Input.Keyboard.JustDown(this.keyEnter) && this.goingDown && !gameOver) {
             //flip manoever...
             this.goingDown = false;
             this.player.setScale(this.player.scaleX, -this.player.scaleY);
         }
-
-        this.checkForEndState(delta_ms);
-
+        
         // "physics simulation"
+        var delta_s = delta_ms/1000;
         var friction = 0.1 * this.speed*this.speed * delta_s; //decelleration due to friction is proportional to v^2
         if(this.speed > 0) {
             this.speed -= friction;
@@ -109,11 +117,9 @@ class ScenePlay extends Phaser.Scene {
         }
         this.speed = this.speed.clamp(-100,100);
 
-        this.o2usage -= 0.01 * delta_s; //recovery
-        this.o2usage = this.o2usage.clamp(0.01,100); //base oxygen usage
-
-        if(this.depth <= 0 && this.o2lvl > 0) {
-            this.o2usage = -0.4; //breathing again
+        if (!gameOver) {
+            this.o2usage -= 0.01 * delta_s; //recovery 
+            this.o2usage = this.o2usage.clamp(0.01,100); //base oxygen usage
         }
 
         this.o2lvl -= this.o2usage * delta_s;
@@ -127,8 +133,6 @@ class ScenePlay extends Phaser.Scene {
         }
         
         //update visuals
-        this.bg.speed = this.speed;
-        this.bg2.speed = this.speed/2;
         this.oxygenBar.setLevel(this.o2lvl, this.o2usage / 0.06 );
 
         //tween background colour
@@ -141,7 +145,7 @@ class ScenePlay extends Phaser.Scene {
         this.blackout.setAlpha( (1 - this.o2lvl) * (1 - this.o2lvl) * (1 - this.o2lvl));
 
         //log
-        if(this.gameOver) {
+        if(gameOver) {
             this.maxDepthText.text = "";
             this.depthText.text = "";
             this.speedText.text = "";
@@ -157,22 +161,27 @@ class ScenePlay extends Phaser.Scene {
 
     checkForEndState(delta_ms)
     {
-        if(!this.goingDown && this.depth <= 0 && !this.gameOver) {
+        if(!this.goingDown && this.depth <= 0 && !this.stateDead) {
             this.displayMsg("Success!\nYou reached:\n**" + this.maxDepth.toFixed(2) + "m**");
+            this.o2usage = -0.4; //breathing again
             this.inputField.setVisible(true);
 
             this.retryBtn.enable(true);
-            this.gameOver = true;
+            return true;
 
         } else if(this.o2lvl <= 0) {
             this.displayMsg("Dive failed...");
             this.totalBlackout.setAlpha(this.totalBlackout.alpha + delta_ms*0.0004);
+            this.stateDead = true;
 
             //TODO DRY
             this.viewtBtn.enable(true);
             this.retryBtn.enable(true);
-            this.gameOver = true;
+
+            return true;
         }
+
+        return false;
     }
 
     setupText()
