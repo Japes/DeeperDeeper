@@ -169,6 +169,7 @@ class ScenePlay extends Phaser.Scene {
             this.totalBlackout.setAlpha(this.totalBlackout.alpha + delta_ms*0.0004);
 
             //TODO DRY
+            this.viewtBtn.enable(true);
             this.retryBtn.enable(true);
             this.gameOver = true;
         }
@@ -197,6 +198,13 @@ class ScenePlay extends Phaser.Scene {
         this.retryBtn.enable(false);
         this.retryBtn.setScale(1.2);
         */
+
+        this.viewtBtn = new TextButton(this, this.w * 0.5, this.h * 0.8,
+            "view scores", function() { 
+                this.scene.start("SceneLeaderBoard");
+            }, this);
+        this.viewtBtn.enable(false);
+
         this.submitBtn = new TextButton(this, this.w * 0.5, this.h * 0.8,
             "submit score", function() { 
                 this.submitHighScore(this.inputField.getFieldString(), this.maxDepth); 

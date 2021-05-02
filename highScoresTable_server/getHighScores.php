@@ -7,7 +7,13 @@
     mysqli_select_db($database, $dbName) or die('Could not select database');
  
     //small hex world
-    $query = "SELECT name, score FROM DD_PlaySessions ORDER BY score DESC LIMIT 20";
+    $query = "SELECT name, score FROM (
+                SELECT max(SCORE) AS score, name 
+                FROM DD_PlaySessions AS innerTable 
+                GROUP BY name ) 
+            AS outerTable
+            ORDER BY score DESC 
+            LIMIT 20";
     $result = mysqli_query($database, $query) or die('Query failed: ' . mysqli_error($database));
     $num_results = mysqli_num_rows($result); 
 

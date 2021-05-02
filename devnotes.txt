@@ -4,13 +4,28 @@ free diving :)
 
 -------------------------------
 
-basic sound
-    water ambience?
-    heartbeat
-    
-stuff gets darker as you go deeper
-    make this a tint on a texture, so there is a gradient towards the bottom
+make it paused until you kick
 
+use local storage to save last entered name
+
+basic sound
+    the sound actually might be better as 8bit?
+    heartbeat
+
+MOBILE FRIENDLY
+    resolution issues?
+    tap controls
+    enter name :/
+
+some kind of interesting change as you go deep
+    different fish? or something
+    rope with measurements (start at 2m down, or something)
+
+more eye candy
+    make depth tint a tint on a texture, so there is a gradient towards the bottom
+    rays of light from the surface
+    bubbles when you kick...
+    big flashing indication when you reach every 10m? or something
 
 MainMenu
     opening screen w/instructions
@@ -20,19 +35,7 @@ protect sql entries
     could at least obfuscate
     could encrypt and send like i do with unit, will still be able to find the encryption key in the source but at least you cant just copy/paste the url
 
-bubbles when you kick...
-
-rope with measurements (start at 2m down, or something)
-
-tunnel vision
-visibility getting worse as you get deep
-    perhaps need flashes of visibility
 heartbeat (proportional to o2 usage)
-
-MOBILE FRIENDLY
-    resolution issues?
-    tap controls
-    enter name :/
 
 3 round format
 
@@ -44,7 +47,6 @@ create an animated favicon? https://www.favicon.cc/
 
 pre-dive breathing minigame
 side minigame for mental state?
-
 
 a lot of the stuff can be extracted into utils 
 find a less hacky way of ensuring that the score has persisted to the db
